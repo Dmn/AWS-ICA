@@ -1,0 +1,44 @@
+﻿@model ThAmCo.Events.Data.GuestBooking
+
+@{
+    ViewData["Title"] = "Guests";
+}
+
+<h2>Guests</h2>
+
+<div>
+    <h4>GuestBooking</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer)
+        </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.FullName)
+        </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Attended)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Attended)
+        </dd>
+    </dl>
+</div>
+@foreach (var item in Model)
+{
+<tr>
+    <dt>
+        @Html.DisplayFor(model => model.Customer)
+    </dt>
+    <dt>
+        @Html.DisplayFor(model => model.Customer.FullName)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.Attended)
+    </dd>
+</tr>
+}
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
