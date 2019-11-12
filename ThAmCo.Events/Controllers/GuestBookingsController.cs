@@ -45,6 +45,16 @@ namespace ThAmCo.Events.Controllers
             return View(guestBooking);
         }
 
+        public async Task<IActionResult> Guests(int id)
+        {
+            var eventlist = await _context.Guests
+                .Include(g => g.Customer)
+                .Where(g => g.EventId == id)
+                .ToListAsync();
+
+            return View(eventlist);
+        }
+
         // GET: GuestBookings/Create
         public IActionResult Create()
         {
