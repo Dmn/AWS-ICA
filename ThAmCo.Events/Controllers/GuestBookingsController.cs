@@ -82,14 +82,27 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: GuestBookings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var guestBooking = await _context.Guests.FindAsync(id);
+        //    var guestBooking = await _context.Guests.FindAsync(id);
+        //    if (guestBooking == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
+        //    ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
+        //    return View(guestBooking);
+        //}
+
+        public async Task<IActionResult> Edit(int CustomerId, int EventId)
+        {
+
+            var guestBooking = await _context.Guests.FindAsync(CustomerId, EventId);
             if (guestBooking == null)
             {
                 return NotFound();
@@ -104,19 +117,17 @@ namespace ThAmCo.Events.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
+        public async Task<IActionResult> Edit([Bind("CustomerId,EventId,Attended")] GuestBooking guestBooking)
         {
-            if (id != guestBooking.CustomerId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(guestBooking);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Guests), new { id = guestBooking.EventId });
+
+                    // look at other edit / create posts, what method dpo thet call here
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,7 +140,6 @@ namespace ThAmCo.Events.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Email", guestBooking.CustomerId);
             ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title", guestBooking.EventId);
@@ -137,9 +147,9 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: GuestBookings/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? customerId)
         {
-            if (id == null)
+            if (customerId == null)
             {
                 return NotFound();
             }
@@ -147,7 +157,7 @@ namespace ThAmCo.Events.Controllers
             var guestBooking = await _context.Guests
                 .Include(g => g.Customer)
                 .Include(g => g.Event)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+                .FirstOrDefaultAsync(m => m.CustomerId == customerId);
             if (guestBooking == null)
             {
                 return NotFound();
@@ -159,9 +169,9 @@ namespace ThAmCo.Events.Controllers
         // POST: GuestBookings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int customerId, int eventId)
         {
-            var guestBooking = await _context.Guests.FindAsync(id);
+            var guestBooking = await _context.Guests.FindAsync(customerId, eventId);
             _context.Guests.Remove(guestBooking);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
