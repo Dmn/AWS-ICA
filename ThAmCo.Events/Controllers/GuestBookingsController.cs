@@ -127,7 +127,6 @@ namespace ThAmCo.Events.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Guests), new { id = guestBooking.EventId });
 
-                    // look at other edit / create posts, what method dpo thet call here
                 }
                 catch (DbUpdateConcurrencyException)
                 {
