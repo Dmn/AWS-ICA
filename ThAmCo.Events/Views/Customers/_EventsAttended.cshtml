@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ThAmCo.Events.Models.EventViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Event)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attended)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Event)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attended)
+            </td>
+            <td>
+                <a asp-controller="GuestBookings" asp-action="Edit" asp-route-CustomerId="@item.CustomerId" asp-route-EventId="@item.EventId">Edit</a> |
+                <a asp-controller="GuestBookings" asp-action="Guests" asp-route-id="@item.EventId">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

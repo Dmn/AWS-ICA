@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -22,6 +23,28 @@ namespace ThAmCo.Events.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Customers.ToListAsync());
+        }
+
+        public async Task<IActionResult> Attended(int id)
+        {
+            var customer = await _context.Customers
+                .Select(c => new CustomerEventViewModel
+                {
+                    CustomerId = c.Id,
+                    Surname = c.Surname,
+                    FirstName = c.FirstName,
+                    Email = c.Email,
+                    Events = c.Bookings
+                        .Select(e => new EventViewModel
+                        {
+                            CustomerId = c.Id,
+                            EventId = e.EventId,
+                            Event = e.Event.Title,
+                            Attended = e.Attended
+                        })
+                }).FirstOrDefaultAsync(c => c.CustomerId == id);
+            ViewData["Name"] = customer.FirstName + " " + customer.Surname;
+            return View(customer);
         }
 
         // GET: Customers/Details/5

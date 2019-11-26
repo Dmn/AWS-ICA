@@ -8,8 +8,9 @@ namespace ThAmCo.Events.Models
 {
     public class EventViewModel
     {
-        [Required]
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
+
+        public int EventId { get; set; }
 
         public string Event { get; set; }
 

@@ -9,19 +9,12 @@ namespace ThAmCo.Events.Models
 {
     public class CustomerEventViewModel
     {
-        [Required]
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
 
-        [Required]
         public string Surname { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
-        public string FullName => FirstName + " " + Surname;
-
-        [Required]
-        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         public IEnumerable<EventViewModel> Events { get; set; }

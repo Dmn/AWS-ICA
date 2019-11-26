@@ -69,7 +69,5 @@ namespace ThAmCo.Events.Data
                 );
             }
         }
-
-        public DbSet<ThAmCo.Events.Models.CustomerEventViewModel> CustomerEventViewModel { get; set; }
     }
 }
