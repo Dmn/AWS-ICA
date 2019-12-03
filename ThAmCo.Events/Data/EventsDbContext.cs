@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Models;
+using ThAmCo.Events.Services;
 
 namespace ThAmCo.Events.Data
 {
@@ -69,5 +70,7 @@ namespace ThAmCo.Events.Data
                 );
             }
         }
+
+        public DbSet<ThAmCo.Events.Services.ReservationGetDto> ReservationGetDto { get; set; }
     }
 }
