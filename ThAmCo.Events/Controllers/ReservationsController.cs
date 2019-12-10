@@ -20,11 +20,11 @@ namespace ThAmCo.Events.Controllers
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
 
-            HttpResponseMessage response = await client.GetAsync("api/venues");
+            HttpResponseMessage response = await client.GetAsync("/api/venues");
             if (response.IsSuccessStatusCode)
                 venues = await response.Content.ReadAsAsync<IEnumerable<ReservationGetDto>>();
             else
-                Debug.WriteLine("Index recieved a bas respones from the web service.");
+                Debug.WriteLine("Index recieved a bad response from the web service.");
 
             return View(venues);
         }

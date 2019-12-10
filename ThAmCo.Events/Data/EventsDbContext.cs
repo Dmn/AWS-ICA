@@ -70,7 +70,5 @@ namespace ThAmCo.Events.Data
                 );
             }
         }
-
-        public DbSet<ThAmCo.Events.Services.ReservationGetDto> ReservationGetDto { get; set; }
     }
 }
