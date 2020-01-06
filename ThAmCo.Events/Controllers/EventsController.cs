@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -89,6 +91,36 @@ namespace ThAmCo.Events.Controllers
             {
                 return NotFound();
             }
+            var venues = new List<AvailabilityGetDto>().AsEnumerable();
+
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:23652/");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+            client.Timeout = TimeSpan.FromSeconds(5);
+
+            HttpResponseMessage response = await client.GetAsync(
+                "/api/Availability?eventType=" + @event.TypeId
+                + "&beginDate=" + @event.Date.ToString("yyyy/MM/dd")
+                + "&endDate=" + @event.Date.ToString("yyyy/MM/dd")
+            );
+
+            if (response.IsSuccessStatusCode)
+                venues = await response.Content.ReadAsAsync<IEnumerable<AvailabilityGetDto>>();
+
+            /**
+            var view = new VenueEventViewModel()
+            {
+                EventId = @event.Id,
+                Title = @event.Title,
+                Date = @event.Date,
+                Duration = @event.Duration,
+                TypeId = @event.TypeId,
+                Venues = venues
+            };
+            */
+
+            ViewData["Venues"] = new SelectList(venues);
+
             return View(@event);
         }
 

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.Services;
+using ThAmCo.Events.Models;
+using ThAmCo.Venues.Models;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -21,19 +23,25 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> Index(int? id)
         {
+            Event @event = await _context.Events.FindAsync(id);
 
             // GET: api/Availability?eventType=X?beginDate=X&endDate=X
 
-            var venues = new List<ReservationGetDto>().AsEnumerable();
+            var venues = new List<AvailabilityGetDto>().AsEnumerable();
 
             var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:23652");
+            client.BaseAddress = new Uri("http://localhost:23652/");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
             client.Timeout = TimeSpan.FromSeconds(5);
 
-            HttpResponseMessage response = await client.GetAsync("/api/venues");
+            HttpResponseMessage response = await client.GetAsync(
+                "/api/Availability?eventType=" + @event.TypeId
+                + "&beginDate=" + @event.Date.ToString("yyyy/MM/dd")
+                + "&endDate=" + @event.Date.ToString("yyyy/MM/dd")
+            );
+
             if (response.IsSuccessStatusCode)
-                venues = await response.Content.ReadAsAsync<IEnumerable<ReservationGetDto>>();
+                venues = await response.Content.ReadAsAsync<IEnumerable<AvailabilityGetDto>>();
             else
                 Debug.WriteLine("Index recieved a bad response from the web service.");
 

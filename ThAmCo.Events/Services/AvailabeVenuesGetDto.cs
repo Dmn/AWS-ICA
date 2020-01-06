@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ThAmCo.Venues.Models
 {
-    public class AvailabilityGetDto
+    public class AvailabeVenuesGetDto
     {
         //Information obtained from AvailabilityController.
         public string VenueCode { get; set; }
